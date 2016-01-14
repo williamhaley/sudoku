@@ -15,15 +15,40 @@
 	<div id="board"></div>
 
 	<script type="text/javascript">
-		var $board = $('#board');
+		(function () {
+			var $board = $('#board');
 
-		var puzzle = randomPuzzle('evil');
+			var puzzle = randomPuzzle('evil');
 
-		var board = new Board($board);
+			var board = new Board($board);
 
-		board.setupUI();
+			board.setupUI();
 
-		board.setPuzzle(puzzle);
+			board.setPuzzle(puzzle);
+
+			// TODO WFH Refactor solver.js.
+
+			var start = new Date();
+
+			var complete = solvePuzzle(_.flatten(puzzle));
+
+			var finished = new Date();
+
+			console.log(start);
+			console.log(finished);
+			console.log('Time elapsed (in microseconds):', finished - start);
+
+			if (puzzleNotSolved(_.flatten(complete))) {
+				console.log('Puzzle NOT solved.');
+			} else {
+				console.log('Puzzle solved!');
+
+				// A trivial animation to indicate the puzzle is solved.
+				// $board.addClass('solved');
+			}
+
+			printPuzzle(complete);
+		})();
 	</script>
 </body>
 </html>

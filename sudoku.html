@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+	<title>Sudoku Solver</title>
+	<link rel="stylesheet" href="sudoku.css" />
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+	<script src="puzzles.js"></script>
+	<script src="solver.js"></script>
+	<script src="board.js"></script>
+</head>
+
+<body>
+	<div id="board"></div>
+
+	<script type="text/javascript">
+		var $board = $('#board');
+
+		var puzzle = randomPuzzle('evil');
+
+		var board = new Board($board);
+
+		board.setupUI();
+
+		board.setPuzzle(puzzle);
+	</script>
+</body>
+</html>

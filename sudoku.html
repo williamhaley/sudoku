@@ -9,9 +9,11 @@
 	<script src="puzzles.js"></script>
 	<script src="solver.js"></script>
 	<script src="board.js"></script>
+	<script src="grid.js"></script>
 </head>
 
 <body>
+	<a href="https://en.wikipedia.org/wiki/Glossary_of_Sudoku">Glossary</a>
 	<div id="board"></div>
 
 	<script type="text/javascript">
@@ -19,6 +21,10 @@
 			var $board = $('#board');
 
 			var puzzle = randomPuzzle('evil');
+
+			var grid = new Grid(puzzle);
+
+			grid.toString();
 
 			var board = new Board($board);
 

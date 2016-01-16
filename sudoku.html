@@ -36,9 +36,11 @@
 
 			var start = new Date();
 
-			var complete = solvePuzzle(_.flatten(puzzle));
+			var complete = solvePuzzle(_.flatten(puzzle), grid);
 
 			var finished = new Date();
+
+			grid.toString();
 
 			console.log(start);
 			console.log(finished);

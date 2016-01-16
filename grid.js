@@ -8,9 +8,14 @@
 	var DIMENSION = 9;
 
 	function Grid(puzzle) {
+		// TODO WFH Make these private.
 		this.puzzle = puzzle;
 
 		this.flattened = _.flatten(puzzle);
+
+		this.candidateMode = false;
+
+		this.candidateIndices = [];
 	}
 
 	Grid.prototype.toString = function () {
@@ -66,12 +71,32 @@
 	};
 
 	Grid.prototype.set = function (index, value) {
+		if (this.candidateMode) {
+			this.candidateIndices.push(index);
+		}
+
 		this.flattened[index] = value;
 
 		var row = Math.floor(index / DIMENSION);
 		var col = index % DIMENSION;
 
 		this.puzzle[col][row] = value;
+	};
+
+	Grid.prototype.useCandidates = function () {
+		this.candidateMode = true;
+	};
+
+	Grid.prototype.invalidateCandidates = function () {
+		_.each(this.candidateIndices, invalidateCandidate, this);
+
+		function invalidateCandidate(candidateIndex) {
+			this.set(candidateIndex, 0);
+		}
+
+		this.candidateIndices = [];
+
+		this.candidateMode = false;
 	};
 
 	window.Grid = Grid;

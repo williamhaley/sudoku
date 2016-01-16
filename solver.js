@@ -88,7 +88,7 @@
 		return _.contains(flatSolution, 0)
 	}
 
-	function solvePuzzle(puzzle) {
+	function solvePuzzle(puzzle, grid) {
 		var flatSolution = _.clone(puzzle);
 
 		/*
@@ -113,6 +113,8 @@
 
 		function solve(index, answer) {
 			flatSolution[index] = answer;
+
+			grid.set(index, answer);
 		}
 
 		function violatesGameRules (answer, index) {
@@ -169,10 +171,16 @@
 
 				puzzleWithGuessedAnswer[firstUnknown] = answers[index];
 
-				var complete = solvePuzzle(puzzleWithGuessedAnswer);
+				grid.useCandidates();
+
+				grid.set(index, answers[index]);
+
+				var complete = solvePuzzle(puzzleWithGuessedAnswer, grid);
 
 				if (!puzzleNotSolved(complete)) {
 					return complete;
+				} else {
+					grid.invalidateCandidates();
 				}
 			}
 		}

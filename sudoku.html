@@ -46,13 +46,13 @@
 			console.log(finished);
 			console.log('Time elapsed (in microseconds):', finished - start);
 
-			if (puzzleNotSolved(_.flatten(complete))) {
-				console.log('Puzzle NOT solved.');
-			} else {
+			if (grid.solved()) {
 				console.log('Puzzle solved!');
 
 				// A trivial animation to indicate the puzzle is solved.
 				// $board.addClass('solved');
+			} else {
+				console.log('Puzzle NOT solved.');
 			}
 
 			board.refreshAnswers(complete);

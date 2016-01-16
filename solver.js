@@ -168,8 +168,6 @@
 
 				puzzleWithGuessedAnswer[firstUnknown] = candidateAnswersForCell[index];
 
-				grid.useCandidates();
-
 				grid.set(firstUnknown, candidateAnswersForCell[index]);
 
 				var complete = solvePuzzle(puzzleWithGuessedAnswer, grid);
@@ -177,7 +175,7 @@
 				if (!puzzleNotSolved(complete)) {
 					return complete;
 				} else {
-					grid.invalidateCandidates(firstUnknown);
+					grid.invalidateAnswersAfter(firstUnknown);
 				}
 			}
 		}

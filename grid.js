@@ -13,9 +13,7 @@
 
 		this.flattened = _.flatten(puzzle);
 
-		this.candidateMode = false;
-
-		this.candidateIndices = [];
+		this.answerIndices = [];
 	}
 
 	Grid.prototype.toString = function () {
@@ -31,7 +29,11 @@
 	};
 
 	Grid.prototype.solved = function () {
-		return _.contains(this.flattened, 0)
+		console.log(this.toString());
+
+		console.log(this.flattened);
+
+		return !_.contains(this.flattened, 0)
 	};
 
 	Grid.prototype.rowForIndex = function (index) {
@@ -75,19 +77,12 @@
 	};
 
 	Grid.prototype.set = function (index, value) {
-		// TODO WFH We don't want to override answers unless we're invalidating.
-		// Maybe break setting out into a private function, and only have this
-		// exception thrown when we're not setting from the invalidate method?
-		if (this.flattened[index] !== 0 && !this.candidateMode && value !== 0) {
-			console.log(index, this.flattened[index]);
-
-			console.log(this.flattened);
-
+		if (this.flattened[index] !== 0 && value !== 0) {
 			throw 'Trying to override answer for a cell.';
 		}
 
-		if (this.candidateMode) {
-			this.candidateIndices.push(index);
+		if (value !== 0) {
+			this.answerIndices.push(index);
 		}
 
 		this.flattened[index] = value;
@@ -104,22 +99,20 @@
 		});
 	};
 
-	Grid.prototype.useCandidates = function () {
-		this.candidateMode = true;
-	};
+	/*
+	 * We tried a candidate, then determined the puzzle was unsolvable with that
+	 * candidate. Invalidate the candidate and every answer set after it.
+	*/
+	Grid.prototype.invalidateAnswersAfter = function (afterIndex) {
+		var index = _.indexOf(this.answerIndices, afterIndex);
 
-	Grid.prototype.invalidateCandidates = function (candidateIndex) {
-		var index = _.indexOf(this.candidateIndices, candidateIndex);
+		var indicesToReset = this.answerIndices.splice(index);
 
-		var indicesToReset = this.candidateIndices.splice(index);
+		_.each(indicesToReset, invalidateAnswer, this);
 
-		_.each(indicesToReset, invalidateCandidate, this);
-
-		function invalidateCandidate(candidateIndex) {
-			this.set(candidateIndex, 0);
+		function invalidateAnswer(answerIndex) {
+			this.set(answerIndex, 0);
 		}
-
-		this.candidateMode = false;
 	};
 
 	window.Grid = Grid;

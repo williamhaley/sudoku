@@ -4,6 +4,8 @@
 	// dimensions. My puzzles are all 9x9, but still, it's bad design.
 	function Board($node) {
 		this.$node = $node;
+
+		$('body').on('answer-provided', _.bind(this.answerProvided, this));
 	}
 
 	function buildEmptyGameBoard(dimension) {
@@ -12,7 +14,7 @@
 		var $row;
 
 		// Might be more readable to have nested for loops for adding a row and
-		// cells, but this is slightly more optimal and nested for loops are evil.
+		// cells, but this is slightly more optimal and nested loops are evil.
 		for (var index = 0; index < total; index++) {
 			if (index % dimension == 0) {
 				$row = $('<tr>');
@@ -37,8 +39,8 @@
 		// This is a bit overkill, but I wanted to show a private function.
 		_.bind(buildEmptyGameBoard, this)(dimension);
 
-		// Some optimization can be gained by manipulating a node while it's
-		// not appended to the DOM. So, append the table at the very end.
+		// Purposefully manipulating the $table node *before* appending it to
+		// the DOM as there are some performance benefits.
 		this.$node.append(this.$table);
 	};
 
@@ -64,7 +66,12 @@
 		this.$tbody.find('td').each(populateCell);
 	};
 
-	Board.prototype.printPuzzle = function (puzzle) {
+	// TODO WFH Shouldn't need to pass the puzzle here or above. Should pass grid
+	// to Ctor and use that reference.
+
+	Board.prototype.refreshAnswers = function (puzzle) {
+		// return; // TODO WFH Not needed if we're live updating.
+
 		var $cells = this.$table.find('td');
 
 		_.each(_.flatten(puzzle), updateCell);
@@ -78,6 +85,14 @@
 
 			$cell.text(item);
 		}
+	};
+
+	Board.prototype.answerProvided = function (event, data) {
+		var $cells = this.$table.find('td');
+
+		var $cell = $($cells[data.index]);
+
+		$cell.text(data.answer);
 	};
 
 	window.Board = Board;

@@ -19,11 +19,15 @@
 	}
 
 	Grid.prototype.toString = function () {
+		var string = '';
+
 		_.each(this.puzzle, print);
 
 		function print(row) {
-			console.log(row.join(' '));
+			string += row.join(' ') + '\n';
 		}
+
+		return string;
 	};
 
 	Grid.prototype.solved = function () {
@@ -71,6 +75,17 @@
 	};
 
 	Grid.prototype.set = function (index, value) {
+		// TODO WFH We don't want to override answers unless we're invalidating.
+		// Maybe break setting out into a private function, and only have this
+		// exception thrown when we're not setting from the invalidate method?
+		if (this.flattened[index] !== 0 && !this.candidateMode && value !== 0) {
+			console.log(index, this.flattened[index]);
+
+			console.log(this.flattened);
+
+			throw 'Trying to override answer for a cell.';
+		}
+
 		if (this.candidateMode) {
 			this.candidateIndices.push(index);
 		}
@@ -80,7 +95,13 @@
 		var row = Math.floor(index / DIMENSION);
 		var col = index % DIMENSION;
 
-		this.puzzle[col][row] = value;
+		this.puzzle[row][col] = value;
+
+		// TODO WFH Break out notifications into a global.
+		$('body').trigger('answer-provided', {
+			answer: value,
+			index: index
+		});
 	};
 
 	Grid.prototype.useCandidates = function () {

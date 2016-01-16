@@ -1,58 +1,79 @@
 (function () {
 
-  // TODO WFH Standardize on structure for puzzle. Better to store it as a 2D
-  // array, flat array, something else? Use this class to manage structure and
-  // grid lookup rather than having other functions convert the puzzle to different
-  // formats when iterating and manipulating?
+	// TODO WFH Standardize on structure for puzzle. Better to store it as a 2D
+	// array, flat array, something else? Use this class to manage structure and
+	// grid lookup rather than having other functions convert the puzzle to different
+	// formats when iterating and manipulating?
 
-  var DIMENSION = 9;
+	var DIMENSION = 9;
 
-  function Grid(puzzle) {
-    this.puzzle = puzzle;
+	function Grid(puzzle) {
+		this.puzzle = puzzle;
 
-    this.flattened = _.flatten(puzzle);
-  }
-
-  Grid.prototype.toString = function () {
-    _.each(this.puzzle, print);
-
-    function print(row) {
-      console.log(row.join(' '));
-    }
+		this.flattened = _.flatten(puzzle);
 	}
 
-  Grid.prototype.solved = function () {
-    return _.contains(this.flattened, 0)
-  };
+	Grid.prototype.toString = function () {
+		_.each(this.puzzle, print);
 
-  Grid.prototype.rowForIndex = function (index) {
-    var base = index - (index % DIMENSION);
+		function print(row) {
+			console.log(row.join(' '));
+		}
+	};
 
-    var offset = 0;
+	Grid.prototype.solved = function () {
+		return _.contains(this.flattened, 0)
+	};
 
-    return _.map(new Array(DIMENSION), function (value) {
-      value = base + offset;
+	Grid.prototype.rowForIndex = function (index) {
+		var base = index - (index % DIMENSION);
 
-      offset++;
+		var offset = 0;
 
-      return puzzle[value];
-    });
-  }
+		return _.map(new Array(DIMENSION), function (value) {
+			value = base + offset;
 
-  Grid.prototype.colForIndex(index) {
-    var base = index % DIMENSION;
+			offset++;
 
-    var offset = 0;
+			return puzzle[value];
+		});
+	};
 
-    return _.map(new Array(DIMENSION), function (value) {
-      value = base + offset;
+	Grid.prototype.colForIndex = function (index) {
+		var base = index % DIMENSION;
 
-      offset += DIMENSION;
+		var offset = 0;
 
-      return puzzle[value];
-    });
-  }
+		return _.map(new Array(DIMENSION), function (value) {
+			value = base + offset;
 
-  window.Grid = Grid;
+			offset += DIMENSION;
+
+			return puzzle[value];
+		});
+	}
+
+	Grid.prototype.inRow = function (index, value) {
+		var row = this.rowForIndex(index);
+
+		return _.indexOf(row, value) > -1;
+	};
+
+	Grid.prototype.inCol = function (index, value) {
+		var col = this.colForIndex(index);
+
+		return _.indexOf(col, value) > -1;
+	};
+
+	Grid.prototype.set = function (index, value) {
+		this.flattened[index] = value;
+
+		var row = Math.floor(index / DIMENSION);
+		var col = index % DIMENSION;
+
+		this.puzzle[col][row] = value;
+	};
+
+	window.Grid = Grid;
 
 })();

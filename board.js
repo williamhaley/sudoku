@@ -64,5 +64,21 @@
 		this.$tbody.find('td').each(populateCell);
 	};
 
+	Board.prototype.printPuzzle = function (puzzle) {
+		var $cells = this.$table.find('td');
+
+		_.each(_.flatten(puzzle), updateCell);
+
+		function updateCell(item, index) {
+			if (item === 0) {
+				return;
+			}
+
+			var $cell = $($cells[index]);
+
+			$cell.text(item);
+		}
+	};
+
 	window.Board = Board;
 })();

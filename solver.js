@@ -72,16 +72,6 @@
 		return row * 9 + col;
 	}
 
-	function indexToCoordinates(index) {
-		var row = Math.floor(index / 9);
-		var col = index % 9;
-
-		return {
-			row: row,
-			col: col
-		};
-	}
-
 	function squareForIndex(flatSolution, flattendIndex) {
 		var square = [];
 
@@ -96,10 +86,6 @@
 
 	function puzzleNotSolved(flatSolution) {
 		return _.contains(flatSolution, 0)
-	}
-
-	function puzzleSolved(flatSolution) {
-		return !puzzleNotSolved(flatSolution);
 	}
 
 	function solvePuzzle(puzzle) {
@@ -169,7 +155,7 @@
 			iterations++;
 		}
 
-		var solved = puzzleSolved(flatSolution);
+		var solved = !puzzleNotSolved(flatSolution);
 
 		// nothing changed, no solutions, let's try something else...
 		if (nothingChanged && puzzleNotSolved(flatSolution)) {
@@ -185,7 +171,7 @@
 
 				var complete = solvePuzzle(puzzleWithGuessedAnswer);
 
-				if (puzzleSolved(complete)) {
+				if (!puzzleNotSolved(complete)) {
 					return complete;
 				}
 			}
@@ -194,19 +180,6 @@
 		return flatSolution;
 	}
 
-	function printPuzzle (puzzle) {
-		function updateCell(item, index) {
-			if (item === 0) {
-				return;
-			}
-			$($('td').get(index)).text(item);
-		}
-
-		// print answers
-		_.each(_.flatten(puzzle), updateCell);
-	}
-
-	window.printPuzzle     = printPuzzle;
 	window.solvePuzzle     = solvePuzzle;
 	window.puzzleNotSolved = puzzleNotSolved;
 

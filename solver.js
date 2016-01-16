@@ -177,7 +177,7 @@
 				if (!puzzleNotSolved(complete)) {
 					return complete;
 				} else {
-					grid.invalidateCandidates();
+					grid.invalidateCandidates(firstUnknown);
 				}
 			}
 		}

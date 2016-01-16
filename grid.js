@@ -108,14 +108,16 @@
 		this.candidateMode = true;
 	};
 
-	Grid.prototype.invalidateCandidates = function () {
-		_.each(this.candidateIndices, invalidateCandidate, this);
+	Grid.prototype.invalidateCandidates = function (candidateIndex) {
+		var index = _.indexOf(this.candidateIndices, candidateIndex);
+
+		var indicesToReset = this.candidateIndices.splice(index);
+
+		_.each(indicesToReset, invalidateCandidate, this);
 
 		function invalidateCandidate(candidateIndex) {
 			this.set(candidateIndex, 0);
 		}
-
-		this.candidateIndices = [];
 
 		this.candidateMode = false;
 	};

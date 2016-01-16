@@ -119,20 +119,22 @@
 	 */
 	Grid.prototype.getFirstIndexForSquare = function (flattenedIndex) {
 		// Get the row for the flattenedIndex.
-		var rowIndex = Math.floor(flattenedIndex / DIMENSION);
+		var row = Math.floor(flattenedIndex / DIMENSION);
 
 		// Get the *first* row for the square in which the flattenedIndex resides.
-		rowIndex = rowIndex - (rowIndex % 3)
+		row = row - (row % 3)
 
 		// Get the column for the flattenedIndex.
-		var colIndex = flattenedIndex % DIMENSION;
+		var col = flattenedIndex % DIMENSION;
 
 		// Get the *first* column for the square in which the flattenedIndex resides.
-		colIndex = colIndex - (colIndex % 3);
+		col = col - (col % 3);
 
-		// Convert the row and column coordinates for the first cell in a square
-		// to a flattened index.
-		return rowIndex * DIMENSION + colIndex;
+		return this.coordinatesToIndex(row, col);
+	};
+
+	Grid.prototype.coordinatesToIndex = function (row, column) {
+		return row * DIMENSION + column;
 	};
 
 	window.Grid = Grid;

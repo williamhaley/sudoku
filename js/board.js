@@ -16,7 +16,7 @@
 		// Might be more readable to have nested for loops for adding a row and
 		// cells, but this is slightly more optimal and nested loops are evil.
 		for (var index = 0; index < total; index++) {
-			if (index % dimension == 0) {
+			if (index % dimension === 0) {
 				$row = $('<tr>');
 
 				this.$tbody.append($row);

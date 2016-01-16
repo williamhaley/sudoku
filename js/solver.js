@@ -1,32 +1,36 @@
 (function () {
 
+	function Solver(grid) {
+		this.grid = grid;
+
+		this.attemptedIndices = [];
+	}
+
 	/*
 	 * Return Array of possible answers at an index by following the rules
 	 * of the game. Answer cannot already be in that row, column, or square.
 	 */
-	function possibleAnswers(grid, index) {
-		var answers = _.range(1, 10);
+	Solver.prototype.availableCandidates = function (index) {
+		var candidates = _.range(1, 10);
 
-		var row = grid.rowForIndex(index);
-		var col = grid.colForIndex(index);
+		var row = this.grid.rowForIndex(index);
+		var col = this.grid.colForIndex(index);
 
-		answers = _.difference(answers, row);
-		answers = _.difference(answers, col);
+		candidates = _.difference(candidates, row);
+		candidates = _.difference(candidates, col);
 
-		var square = grid.squareForIndex(index);
+		var square = this.grid.squareForIndex(index);
 
-		answers = _.difference(answers, square);
+		candidates = _.difference(candidates, square);
 
-		return answers;
-	}
+		return candidates;
+	};
 
-	function solvePuzzle(puzzle, grid) {
-		var flatSolution = _.clone(puzzle);
-
+	Solver.prototype.solve = function () {
 		var iterations = 0;
 		var nothingChanged;
 
-		while (!grid.solved() && iterations < 100 && !nothingChanged) {
+		while (!this.grid.solved() && iterations < 100 && !nothingChanged) {
 			nothingChanged = true;
 
 			function attemptToSolveCell(item, index) {
@@ -34,55 +38,70 @@
 					return;
 				}
 
-				var answers = possibleAnswers(grid, index);
+				var candidates = this.availableCandidates(index);
 
-				if (answers.length !== 1) {
+				if (candidates.length !== 1) {
 					return;
 				}
 
-				var answer = answers[0];
+				var candidate = candidates[0];
 
 				nothingChanged = false;
 
-				flatSolution[index] = answer;
-
-				grid.set(index, answer);
+				this.useCandidate(candidate, index);
 			}
 
-			_.each(flatSolution, attemptToSolveCell);
+			// TODO WFH I'm using _.each in some places, while in others, for in others. Consistency!
+			_.each(this.grid.flattened, attemptToSolveCell, this);
 
 			iterations++;
 		}
 
-		var solved = grid.solved();
+		var solved = this.grid.solved();
 
 		// nothing changed, no solutions, let's try something else...
-		if (nothingChanged && !grid.solved()) {
+		if (nothingChanged && !this.grid.solved()) {
 
-			var firstUnknown = _.indexOf(flatSolution, 0);
+			var firstUnknown = _.indexOf(this.grid.flattened, 0);
 
-			var candidateAnswersForCell = possibleAnswers(grid, firstUnknown);
+			var candidateAnswersForCell = this.availableCandidates(firstUnknown);
 
 			for (var index = 0; index < candidateAnswersForCell.length; index++) {
-				var puzzleWithGuessedAnswer = _.clone(flatSolution);
+				this.useCandidate(candidateAnswersForCell[index], firstUnknown);
 
-				puzzleWithGuessedAnswer[firstUnknown] = candidateAnswersForCell[index];
+				this.solve();
 
-				grid.set(firstUnknown, candidateAnswersForCell[index]);
-
-				var complete = solvePuzzle(puzzleWithGuessedAnswer, grid);
-
-				if (grid.solved()) {
-					return complete;
+				if (this.grid.solved()) {
+					return;
 				} else {
-					grid.invalidateAnswersAfter(firstUnknown);
+					this.invalidateAnswersAfter(firstUnknown);
 				}
 			}
 		}
+	};
 
-		return flatSolution;
-	}
+	Solver.prototype.useCandidate = function (candidate, index) {
+		this.grid.set(index, candidate);
 
-	window.solvePuzzle = solvePuzzle;
+		this.attemptedIndices.push(index);
+	};
+
+	/*
+	 * We tried a candidate, then determined the puzzle was unsolvable with that
+	 * candidate. Invalidate the candidate and every answer set after it.
+	*/
+	Solver.prototype.invalidateAnswersAfter = function (afterIndex) {
+		var index = _.indexOf(this.attemptedIndices, afterIndex);
+
+		var indicesToReset = this.attemptedIndices.splice(index);
+
+		_.each(indicesToReset, invalidateAnswer, this);
+
+		function invalidateAnswer(answerIndex) {
+			this.grid.set(answerIndex, 0);
+		}
+	};
+
+	window.Solver = Solver;
 
 })();

@@ -27,17 +27,15 @@
 
 			console.log(grid.toString());
 
-			var board = new Board($board);
-
-			board.setupUI();
-
-			board.setPuzzle(puzzle);
+			var board = new Board($board, grid);
 
 			// TODO WFH Refactor solver.js.
 
+			var solver = new Solver(grid);
+
 			var start = new Date();
 
-			var complete = solvePuzzle(_.flatten(puzzle), grid);
+			solver.solve();
 
 			var finished = new Date();
 
@@ -55,8 +53,6 @@
 			} else {
 				console.log('Puzzle NOT solved.');
 			}
-
-			board.refreshAnswers(complete);
 		})();
 	</script>
 </body>

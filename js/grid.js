@@ -74,24 +74,6 @@
 		});
 	};
 
-	/*
-	 * We tried a candidate, then determined the puzzle was unsolvable with that
-	 * candidate. Invalidate the candidate and every answer set after it.
-	*/
-	// TODO WFH This belongs in solver, not here. Grid shouldn't need to know
-	// about invalidating its own answers.
-	Grid.prototype.invalidateAnswersAfter = function (afterIndex) {
-		var index = _.indexOf(this.answerIndices, afterIndex);
-
-		var indicesToReset = this.answerIndices.splice(index);
-
-		_.each(indicesToReset, invalidateAnswer, this);
-
-		function invalidateAnswer(answerIndex) {
-			this.set(answerIndex, 0);
-		}
-	};
-
 	Grid.prototype.squareForIndex = function (flattendIndex) {
 		var square = [];
 		var index = this.getFirstIndexForSquare(flattendIndex);

@@ -35,7 +35,7 @@
 	Grid.prototype.rowForIndex = function (index) {
 		var rowIndex = Math.floor(index / DIMENSION);
 
-		return this.flattened[rowIndex];
+		return this.puzzle[rowIndex];
 	};
 
 	Grid.prototype.colForIndex = function (index) {

@@ -5,7 +5,7 @@
 	function Board($node) {
 		this.$node = $node;
 
-		$('body').on('answer-provided', _.bind(this.answerProvided, this));
+		notifications.on('answer-provided', _.bind(this.answerProvided, this));
 	}
 
 	function buildEmptyGameBoard(dimension) {

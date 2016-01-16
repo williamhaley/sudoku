@@ -22,40 +22,40 @@
 		}
 	}
 
-	function inRow(puzzle, index, value) {
-		var row = getRowForIndex(puzzle, index);
+	// function inRow(puzzle, index, value) {
+	// 	var row = getRowForIndex(puzzle, index);
+	//
+	// 	return _.indexOf(row, value) > -1;
+	// }
+	//
+	// function inCol(puzzle, index, value) {
+	// 	var col = getColForIndex(puzzle, index);
+	//
+	// 	return _.indexOf(col, value) > -1;
+	// }
 
-		return _.indexOf(row, value) > -1;
-	}
-
-	function inCol(puzzle, index, value) {
-		var col = getColForIndex(puzzle, index);
-
-		return _.indexOf(col, value) > -1;
-	}
-
-	function getColForIndex(puzzle, index) {
-		var base = index % 9;
-
-		var offset = 0;
-
-		return _.map(new Array(9), function (value) {
-			value = base + offset;
-			offset += 9;
-			return puzzle[value];
-		});
-	}
-
-	function getRowForIndex(puzzle, index) {
-		var base = index - (index % 9);
-		var offset = 0;
-
-		return _.map(new Array(9), function (value) {
-			value = base + offset;
-			offset++;
-			return puzzle[value];
-		});
-	}
+	// function getColForIndex(puzzle, index) {
+	// 	var base = index % 9;
+	//
+	// 	var offset = 0;
+	//
+	// 	return _.map(new Array(9), function (value) {
+	// 		value = base + offset;
+	// 		offset += 9;
+	// 		return puzzle[value];
+	// 	});
+	// }
+	//
+	// function getRowForIndex(puzzle, index) {
+	// 	var base = index - (index % 9);
+	// 	var offset = 0;
+	//
+	// 	return _.map(new Array(9), function (value) {
+	// 		value = base + offset;
+	// 		offset++;
+	// 		return puzzle[value];
+	// 	});
+	// }
 
 	function getFirstIndexInSquare (index) {
 		var row = Math.floor(index / 9);
@@ -92,11 +92,11 @@
 	 * Return Array of possible answers at an index by following the rules
 	 * of the game. Answer cannot already be in that row, column, or square.
 	 */
-	function possibleAnswers(flatSolution, index) {
+	function possibleAnswers(flatSolution, grid, index) {
 		var answers = _.range(1, 10);
 
-		var row = getRowForIndex(flatSolution, index);
-		var col = getColForIndex(flatSolution, index);
+		var row = grid.rowForIndex(index);
+		var col = grid.colForIndex(index);
 
 		answers = _.difference(answers, row);
 		answers = _.difference(answers, col);
@@ -134,7 +134,7 @@
 					return;
 				}
 
-				var answers = possibleAnswers(flatSolution, index);
+				var answers = possibleAnswers(flatSolution, grid, index);
 
 				if (answers.length !== 1) {
 					return;
@@ -161,7 +161,7 @@
 
 			var firstUnknown = _.indexOf(flatSolution, 0);
 
-			var candidateAnswersForCell = possibleAnswers(flatSolution, firstUnknown);
+			var candidateAnswersForCell = possibleAnswers(flatSolution, grid, firstUnknown);
 
 			for (var index = 0; index < candidateAnswersForCell.length; index++) {
 				var puzzleWithGuessedAnswer = _.clone(flatSolution);

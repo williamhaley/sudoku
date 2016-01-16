@@ -29,25 +29,13 @@
 	};
 
 	Grid.prototype.solved = function () {
-		console.log(this.toString());
-
-		console.log(this.flattened);
-
 		return !_.contains(this.flattened, 0)
 	};
 
 	Grid.prototype.rowForIndex = function (index) {
-		var base = index - (index % DIMENSION);
+		var rowIndex = Math.floor(index / DIMENSION);
 
-		var offset = 0;
-
-		return _.map(new Array(DIMENSION), function (value) {
-			value = base + offset;
-
-			offset++;
-
-			return puzzle[value];
-		});
+		return this.flattened[rowIndex];
 	};
 
 	Grid.prototype.colForIndex = function (index) {
@@ -55,30 +43,18 @@
 
 		var offset = 0;
 
-		return _.map(new Array(DIMENSION), function (value) {
-			value = base + offset;
+		return _.map(new Array(DIMENSION), function (colIndex) {
+			colIndex = base + offset;
 
 			offset += DIMENSION;
 
-			return puzzle[value];
-		});
-	}
-
-	Grid.prototype.inRow = function (index, value) {
-		var row = this.rowForIndex(index);
-
-		return _.indexOf(row, value) > -1;
-	};
-
-	Grid.prototype.inCol = function (index, value) {
-		var col = this.colForIndex(index);
-
-		return _.indexOf(col, value) > -1;
+			return this.flattened[colIndex];
+		}, this);
 	};
 
 	Grid.prototype.set = function (index, value) {
 		if (this.flattened[index] !== 0 && value !== 0) {
-			throw 'Trying to override answer for a cell.';
+			throw 'Trying to override an existing answer for a cell.';
 		}
 
 		if (value !== 0) {
@@ -87,13 +63,12 @@
 
 		this.flattened[index] = value;
 
-		var row = Math.floor(index / DIMENSION);
-		var col = index % DIMENSION;
+		var rowIndex = Math.floor(index / DIMENSION);
+		var colIndex = index % DIMENSION;
 
-		this.puzzle[row][col] = value;
+		this.puzzle[rowIndex][colIndex] = value;
 
-		// TODO WFH Break out notifications into a global.
-		$('body').trigger('answer-provided', {
+		notifications.emit('answer-provided', {
 			answer: value,
 			index: index
 		});
@@ -103,6 +78,8 @@
 	 * We tried a candidate, then determined the puzzle was unsolvable with that
 	 * candidate. Invalidate the candidate and every answer set after it.
 	*/
+	// TODO WFH This belongs in solver, not here. Grid shouldn't need to know
+	// about invalidating its own answers.
 	Grid.prototype.invalidateAnswersAfter = function (afterIndex) {
 		var index = _.indexOf(this.answerIndices, afterIndex);
 

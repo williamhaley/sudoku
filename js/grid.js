@@ -5,6 +5,9 @@
 	// grid lookup rather than having other functions convert the puzzle to different
 	// formats when iterating and manipulating?
 
+	// TODO WFH This is a bit silly. Pretty sure my logic is in no way setup
+	// to handle a non 9 dimensioned grid. Worth a shot though... I guess what
+	// I mean is, this provides no *real* benefit beyond DRY.
 	var DIMENSION = 9;
 
 	function Grid(puzzle) {

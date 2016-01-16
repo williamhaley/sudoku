@@ -92,6 +92,49 @@
 		}
 	};
 
+	Grid.prototype.squareForIndex = function (flattendIndex) {
+		var square = [];
+		var index = this.getFirstIndexForSquare(flattendIndex);
+		var indexes = [];
+
+		while (square.length < DIMENSION) {
+			var value = this.flattened[index];
+
+			index++;
+
+			if (index % 3 == 0) {
+				index += 6;
+			}
+
+			square.push(value)
+		}
+
+		return square;
+	};
+
+	/*
+	 * Return the flattened index of the first item in a 3x3 square.
+	 * TODO WFH I need to determine if this sort of work is worth it or if it
+	 * would be easier to navigate the 2D array.
+	 */
+	Grid.prototype.getFirstIndexForSquare = function (flattenedIndex) {
+		// Get the row for the flattenedIndex.
+		var rowIndex = Math.floor(flattenedIndex / DIMENSION);
+
+		// Get the *first* row for the square in which the flattenedIndex resides.
+		rowIndex = rowIndex - (rowIndex % 3)
+
+		// Get the column for the flattenedIndex.
+		var colIndex = flattenedIndex % DIMENSION;
+
+		// Get the *first* column for the square in which the flattenedIndex resides.
+		colIndex = colIndex - (colIndex % 3);
+
+		// Convert the row and column coordinates for the first cell in a square
+		// to a flattened index.
+		return rowIndex * DIMENSION + colIndex;
+	};
+
 	window.Grid = Grid;
 
 })();

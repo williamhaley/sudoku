@@ -1,27 +1,5 @@
 (function () {
 
-	function walkSquare(puzzle, index, callback) {
-		var square = [];
-		var index = getFirstIndexInSquare(index);
-		var indexes = [];
-
-		while (square.length < 9) {
-			var value = puzzle[index];
-
-			if (callback) {
-				callback(value, index);
-			}
-
-			index++;
-
-			if (index % 3 == 0) {
-				index += 6;
-			}
-
-			square.push(value)
-		}
-	}
-
 	// function inRow(puzzle, index, value) {
 	// 	var row = getRowForIndex(puzzle, index);
 	//
@@ -57,31 +35,8 @@
 	// 	});
 	// }
 
-	function getFirstIndexInSquare (index) {
-		var row = Math.floor(index / 9);
-		row = row - (row % 3)
-
-		var col = index % 9;
-		col = col - (col % 3);
-
-		// return index - (index % 9) - (Math.floor(index / 9) % 3) * 9;
-		return row * 9 + col;
-	}
-
 	function coordinateToIndex(col, row) {
 		return row * 9 + col;
-	}
-
-	function squareForIndex(flatSolution, flattendIndex) {
-		var square = [];
-
-		walkSquare(flatSolution, flattendIndex, pushValueAtIndex);
-
-		function pushValueAtIndex(value, index) {
-			square.push(value);
-		}
-
-		return square;
 	}
 
 	function puzzleNotSolved(flatSolution) {
@@ -101,7 +56,7 @@
 		answers = _.difference(answers, row);
 		answers = _.difference(answers, col);
 
-		var square = squareForIndex(flatSolution, index);
+		var square = grid.squareForIndex(index);
 
 		answers = _.difference(answers, square);
 

@@ -90,7 +90,7 @@
 				index += 6;
 			}
 
-			square.push(value)
+			square.push(value);
 		}
 
 		return square;
@@ -106,7 +106,7 @@
 		var row = Math.floor(flattenedIndex / this.dimension);
 
 		// Get the *first* row for the square in which the flattenedIndex resides.
-		row = row - (row % 3)
+		row = row - (row % 3);
 
 		// Get the column for the flattenedIndex.
 		var col = flattenedIndex % this.dimension;

@@ -1,4 +1,5 @@
 (function () {
+
 	var easy = [
 		[
 			[3, 0, 9, 5, 4, 0, 8, 0, 6],
@@ -101,4 +102,5 @@
 
 		return puzzlesByDifficulty[index];
 	};
+
 })();

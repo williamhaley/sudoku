@@ -5,18 +5,17 @@
 	// grid lookup rather than having other functions convert the puzzle to different
 	// formats when iterating and manipulating?
 
-	// TODO WFH This is a bit silly. Pretty sure my logic is in no way setup
-	// to handle a non 9 dimensioned grid. Worth a shot though... I guess what
-	// I mean is, this provides no *real* benefit beyond DRY.
-	var DIMENSION = 9;
-
 	function Grid(puzzle) {
-		// TODO WFH Make these private.
 		this.puzzle = puzzle;
 
 		this.flattened = _.flatten(puzzle);
 
 		this.answerIndices = [];
+
+		// TODO WFH Throw exception if not a perfect square? How do other sudoku
+		// puzzles work when not 9x9? Like, if 2x2, are the numbers allowed only
+		// 1 and 2? More than that, can my solver work for those non-9x9 puzzles?
+		this.dimension = Math.sqrt(this.flattened.length);
 	}
 
 	Grid.prototype.toString = function () {
@@ -36,20 +35,20 @@
 	};
 
 	Grid.prototype.rowForIndex = function (index) {
-		var rowIndex = Math.floor(index / DIMENSION);
+		var rowIndex = Math.floor(index / this.dimension);
 
 		return this.puzzle[rowIndex];
 	};
 
 	Grid.prototype.colForIndex = function (index) {
-		var base = index % DIMENSION;
+		var base = index % this.dimension;
 
 		var offset = 0;
 
-		return _.map(new Array(DIMENSION), function (colIndex) {
+		return _.map(new Array(this.dimension), function (colIndex) {
 			colIndex = base + offset;
 
-			offset += DIMENSION;
+			offset += this.dimension;
 
 			return this.flattened[colIndex];
 		}, this);
@@ -66,8 +65,8 @@
 
 		this.flattened[index] = value;
 
-		var rowIndex = Math.floor(index / DIMENSION);
-		var colIndex = index % DIMENSION;
+		var rowIndex = Math.floor(index / this.dimension);
+		var colIndex = index % this.dimension;
 
 		this.puzzle[rowIndex][colIndex] = value;
 
@@ -82,7 +81,7 @@
 		var index = this.getFirstIndexForSquare(flattendIndex);
 		var indexes = [];
 
-		while (square.length < DIMENSION) {
+		while (square.length < this.dimension) {
 			var value = this.flattened[index];
 
 			index++;
@@ -104,13 +103,13 @@
 	 */
 	Grid.prototype.getFirstIndexForSquare = function (flattenedIndex) {
 		// Get the row for the flattenedIndex.
-		var row = Math.floor(flattenedIndex / DIMENSION);
+		var row = Math.floor(flattenedIndex / this.dimension);
 
 		// Get the *first* row for the square in which the flattenedIndex resides.
 		row = row - (row % 3)
 
 		// Get the column for the flattenedIndex.
-		var col = flattenedIndex % DIMENSION;
+		var col = flattenedIndex % this.dimension;
 
 		// Get the *first* column for the square in which the flattenedIndex resides.
 		col = col - (col % 3);
@@ -119,7 +118,11 @@
 	};
 
 	Grid.prototype.coordinatesToIndex = function (row, column) {
-		return row * DIMENSION + column;
+		return row * this.dimension + column;
+	};
+
+	Grid.prototype.cells = function () {
+		return this.flattened;
 	};
 
 	window.Grid = Grid;

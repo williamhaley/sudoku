@@ -7,4 +7,5 @@ window.notifications = {
 	on: function (name, callback) {
 		$('body').on(name, callback);
 	}
-}
+
+};

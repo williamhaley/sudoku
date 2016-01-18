@@ -7,6 +7,7 @@
 
 <body>
 	<a href="https://en.wikipedia.org/wiki/Glossary_of_Sudoku" target="_blank">Glossary</a>
+
 	<div id="board"></div>
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -24,13 +25,7 @@
 			var puzzle = randomPuzzle('evil');
 
 			var grid = new Grid(puzzle);
-
-			console.log(grid.toString());
-
 			var board = new Board($board, grid);
-
-			// TODO WFH Refactor solver.js.
-
 			var solver = new Solver(grid);
 
 			var start = new Date();
@@ -38,8 +33,6 @@
 			solver.solve();
 
 			var finished = new Date();
-
-			console.log(grid.toString());
 
 			console.log(start);
 			console.log(finished);

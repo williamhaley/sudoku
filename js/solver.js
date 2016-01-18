@@ -51,7 +51,6 @@
 				this.useCandidate(candidate, index);
 			}
 
-			// TODO WFH I'm using _.each in some places, while in others, for in others. Consistency!
 			_.each(this.grid.flattened, attemptToSolveCell, this);
 
 			iterations++;

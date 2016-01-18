@@ -1,8 +1,5 @@
 (function () {
 
-	// TODO WFH.
-	var DIMENSION = 9;
-
 	function Board($node, grid) {
 		this.$node = $node;
 
@@ -13,20 +10,19 @@
 		this.setupUI();
 	}
 
-	function populateBoard($board, flattenedPuzzle, reducer) {
+	function populateBoard($board, cells) {
 		var $row;
 
 		// Might be more readable to have nested for loops for adding a row and
 		// cells, but this is slightly more optimal and nested loops are evil.
-		for (var index = 0; index < flattenedPuzzle.length; index++) {
-			if (index % DIMENSION === 0) {
+		_.each(cells, populateCell, this);
+
+		function populateCell(given, index) {
+			if (index % this.grid.dimension === 0) {
 				$row = $('<tr>');
 
 				$board.append($row);
 			}
-
-			// TODO WFH Create an accessor for Grid.
-			var given = flattenedPuzzle[index];
 
 			var $cell = $('<td>');
 
@@ -47,7 +43,7 @@
 
 		// Purposefully manipulating the $table node *before* appending it to
 		// the DOM as there are some performance benefits.
-		populateBoard(this.$tbody, this.grid.flattened);
+		_.bind(populateBoard, this)(this.$tbody, this.grid.cells());
 
 		this.$node.append(this.$table);
 	};

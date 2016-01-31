@@ -8,4 +8,6 @@ Install [nvm](https://github.com/creationix/nvm/blob/master/README.markdown).
 
 	nvm use
 
-# TODO Tests (of course).
+# Test
+
+	node test

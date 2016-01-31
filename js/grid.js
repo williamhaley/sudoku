@@ -1,4 +1,4 @@
-(function () {
+(function (exports) {
 
 	// TODO WFH Standardize on structure for puzzle. Better to store it as a 2D
 	// array, flat array, something else? Use this class to manage structure and
@@ -125,6 +125,6 @@
 		return this.flattened;
 	};
 
-	window.Grid = Grid;
+	exports.Grid = Grid;
 
-})();
+})(this);

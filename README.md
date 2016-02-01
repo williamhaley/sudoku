@@ -10,7 +10,7 @@ Install [nvm](https://github.com/creationix/nvm/blob/master/README.markdown).
 
 # Build
 
-	./node_modules/.bin/browserify lib/grid.js -o public/js/bundle.js
+	npm run build-js
 
 # Run
 
@@ -18,4 +18,4 @@ Install [nvm](https://github.com/creationix/nvm/blob/master/README.markdown).
 
 # Test
 
-	node test
+	npm test

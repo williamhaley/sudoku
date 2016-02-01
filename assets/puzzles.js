@@ -1,3 +1,7 @@
+// TODO WFH I feel weird putting this in `assets`. It's a module, and not raw
+// JSON, but that's essentially what I'm presenting in the end, so I think it
+// makes sense.
+
 var easy = [
 	[
 		[3, 0, 9, 5, 4, 0, 8, 0, 6],
@@ -83,20 +87,4 @@ var puzzles = {
 	evil:   evil
 };
 
-module.exports = function (difficulty) {
-	var puzzlesByDifficulty = puzzles[difficulty];
-
-	if (!puzzlesByDifficulty) {
-		throw 'Invalid difficulty: ' + difficulty + '.';
-	}
-
-	var size = puzzlesByDifficulty.length;
-
-	if (size === 0) {
-		throw 'No puzzles for difficulty: ' + difficulty + '.';
-	}
-
-	var index = Math.floor(Math.random() * size);
-
-	return puzzlesByDifficulty[index];
-};
+module.exports = puzzles;

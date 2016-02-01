@@ -1,11 +1,122 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// TODO WFH I feel weird putting this in `assets`. It's a module, and not raw
+// JSON, but that's essentially what I'm presenting in the end, so I think it
+// makes sense.
+
+var easy = [
+	[
+		[3, 0, 9, 5, 4, 0, 8, 0, 6],
+		[0, 7, 0, 8, 3, 0, 0, 0, 0],
+		[5, 0, 2, 0, 0, 7, 3, 0, 0],
+		[0, 0, 7, 0, 9, 0, 0, 0, 2],
+		[9, 3, 0, 0, 0, 0, 0, 5, 7],
+		[4, 0, 0, 0, 7, 0, 6, 0, 0],
+		[0, 0, 3, 7, 0, 0, 5, 0, 4],
+		[0, 0, 0, 0, 1, 9, 0, 2, 0],
+		[7, 0, 1, 0, 5, 3, 9, 0, 8]
+	]
+];
+
+var medium = [
+	[
+		[3, 5, 0, 7, 0, 0, 4, 0, 0],
+		[0, 0, 7, 0, 2, 0, 0, 8, 0],
+		[2, 0, 0, 0, 0, 5, 0, 0, 3],
+		[7, 0, 1, 0, 0, 0, 0, 2, 0],
+		[0, 2, 4, 0, 0, 0, 7, 1, 0],
+		[0, 3, 0, 0, 0, 0, 8, 0, 9],
+		[1, 0, 0, 6, 0, 0, 0, 0, 8],
+		[0, 8, 0, 0, 9, 0, 6, 0, 0],
+		[0, 0, 2, 0, 0, 8, 0, 5, 4]
+	]
+];
+
+var hard = [
+	[
+		[0, 8, 0, 2, 0, 5, 9, 0, 0],
+		[0, 0, 0, 0, 0, 7, 0, 8, 0],
+		[0, 2, 4, 0, 0, 0, 0, 0, 0],
+		[0, 0, 3, 4, 9, 0, 0, 0, 7],
+		[9, 0, 0, 0, 0, 0, 0, 0, 5],
+		[8, 0, 0, 0, 2, 3, 1, 0, 0],
+		[0, 0, 0, 0, 0, 0, 4, 6, 0],
+		[0, 9, 0, 7, 0, 0, 0, 0, 0],
+		[0, 0, 5, 6, 0, 2, 0, 3, 0]
+	]
+];
+
+var evil = [
+	[
+		[0, 0, 0, 7, 6, 0, 1, 0 ,0],
+		[0, 0, 0, 0, 0, 0, 0, 4, 8],
+		[7, 0, 0, 4, 0, 0, 0, 5, 0],
+		[0, 4, 0, 0, 3, 0, 0, 0, 1],
+		[6, 0, 0, 0, 0, 0, 0, 0, 2],
+		[8, 0, 0, 0, 7, 0, 0, 6, 0],
+		[0, 5, 0, 0, 0, 8, 0, 0, 3],
+		[2, 1, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 6, 0, 1, 5, 0, 0, 0]
+	],
+	[
+		[2, 0, 0, 0, 0, 3, 0, 6, 7],
+		[0, 8, 0, 9, 1, 0, 0, 4, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[8, 0, 0, 0, 0, 4, 0, 9, 0],
+		[3, 0, 0, 5, 0, 1, 0, 0, 4],
+		[0, 4, 0, 6, 0, 0, 0, 0, 2],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 7, 0, 0, 5, 6, 0, 3, 0],
+		[9, 3, 0, 7, 0, 0, 0, 0, 5]
+	],
+	[
+		[0, 0, 0, 0, 6, 8, 0, 2, 0],
+		[6, 5, 0, 0, 0, 0, 0, 7, 0],
+		[0, 0, 0, 3, 0, 0, 0, 0, 4],
+		[0, 0, 8, 0, 0, 1, 0, 0, 9],
+		[0, 0, 3, 0, 7, 0, 1, 0, 0],
+		[5, 0, 0, 8, 0, 0, 3, 0, 0],
+		[1, 0, 0, 0, 0, 3, 0, 0, 0],
+		[0, 9, 0, 0, 0, 0, 0, 3, 7],
+		[0, 4, 0, 9, 5, 0, 0, 0, 0]
+	]
+];
+
+var puzzles = {
+	easy:   easy,
+	medium: medium,
+	hard:   hard,
+	evil:   evil
+};
+
+module.exports = puzzles;
+
+},{}],2:[function(require,module,exports){
 (function (global){
-global.Grid         = require('./grid.js'   );
-global.Solver       = require('./solver.js' );
-global.randomPuzzle = require('./puzzles.js');
+global.Grid   = require('./grid.js'   );
+global.Solver = require('./solver.js' );
+
+var puzzles   = require('../assets/puzzles.js');
+
+global.randomPuzzle = function (difficulty) {
+	var puzzlesByDifficulty = puzzles[difficulty];
+
+	if (!puzzlesByDifficulty) {
+		throw 'Invalid difficulty: ' + difficulty + '.';
+	}
+
+	var size = puzzlesByDifficulty.length;
+
+	if (size === 0) {
+		throw 'No puzzles for difficulty: ' + difficulty + '.';
+	}
+
+	var index = Math.floor(Math.random() * size);
+
+	return puzzlesByDifficulty[index];
+};
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./grid.js":2,"./puzzles.js":3,"./solver.js":4}],2:[function(require,module,exports){
+},{"../assets/puzzles.js":1,"./grid.js":3,"./solver.js":4}],3:[function(require,module,exports){
 // TODO WFH Standardize on structure for puzzle. Better to store it as a 2D
 // array, flat array, something else? Use this class to manage structure and
 // grid lookup rather than having other functions convert the puzzle to different
@@ -136,111 +247,7 @@ Grid.prototype.cells = function () {
 
 module.exports = Grid;
 
-},{"underscore":5}],3:[function(require,module,exports){
-var easy = [
-	[
-		[3, 0, 9, 5, 4, 0, 8, 0, 6],
-		[0, 7, 0, 8, 3, 0, 0, 0, 0],
-		[5, 0, 2, 0, 0, 7, 3, 0, 0],
-		[0, 0, 7, 0, 9, 0, 0, 0, 2],
-		[9, 3, 0, 0, 0, 0, 0, 5, 7],
-		[4, 0, 0, 0, 7, 0, 6, 0, 0],
-		[0, 0, 3, 7, 0, 0, 5, 0, 4],
-		[0, 0, 0, 0, 1, 9, 0, 2, 0],
-		[7, 0, 1, 0, 5, 3, 9, 0, 8]
-	]
-];
-
-var medium = [
-	[
-		[3, 5, 0, 7, 0, 0, 4, 0, 0],
-		[0, 0, 7, 0, 2, 0, 0, 8, 0],
-		[2, 0, 0, 0, 0, 5, 0, 0, 3],
-		[7, 0, 1, 0, 0, 0, 0, 2, 0],
-		[0, 2, 4, 0, 0, 0, 7, 1, 0],
-		[0, 3, 0, 0, 0, 0, 8, 0, 9],
-		[1, 0, 0, 6, 0, 0, 0, 0, 8],
-		[0, 8, 0, 0, 9, 0, 6, 0, 0],
-		[0, 0, 2, 0, 0, 8, 0, 5, 4]
-	]
-];
-
-var hard = [
-	[
-		[0, 8, 0, 2, 0, 5, 9, 0, 0],
-		[0, 0, 0, 0, 0, 7, 0, 8, 0],
-		[0, 2, 4, 0, 0, 0, 0, 0, 0],
-		[0, 0, 3, 4, 9, 0, 0, 0, 7],
-		[9, 0, 0, 0, 0, 0, 0, 0, 5],
-		[8, 0, 0, 0, 2, 3, 1, 0, 0],
-		[0, 0, 0, 0, 0, 0, 4, 6, 0],
-		[0, 9, 0, 7, 0, 0, 0, 0, 0],
-		[0, 0, 5, 6, 0, 2, 0, 3, 0]
-	]
-];
-
-var evil = [
-	[
-		[0, 0, 0, 7, 6, 0, 1, 0 ,0],
-		[0, 0, 0, 0, 0, 0, 0, 4, 8],
-		[7, 0, 0, 4, 0, 0, 0, 5, 0],
-		[0, 4, 0, 0, 3, 0, 0, 0, 1],
-		[6, 0, 0, 0, 0, 0, 0, 0, 2],
-		[8, 0, 0, 0, 7, 0, 0, 6, 0],
-		[0, 5, 0, 0, 0, 8, 0, 0, 3],
-		[2, 1, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 6, 0, 1, 5, 0, 0, 0]
-	],
-	[
-		[2, 0, 0, 0, 0, 3, 0, 6, 7],
-		[0, 8, 0, 9, 1, 0, 0, 4, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[8, 0, 0, 0, 0, 4, 0, 9, 0],
-		[3, 0, 0, 5, 0, 1, 0, 0, 4],
-		[0, 4, 0, 6, 0, 0, 0, 0, 2],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 7, 0, 0, 5, 6, 0, 3, 0],
-		[9, 3, 0, 7, 0, 0, 0, 0, 5]
-	],
-	[
-		[0, 0, 0, 0, 6, 8, 0, 2, 0],
-		[6, 5, 0, 0, 0, 0, 0, 7, 0],
-		[0, 0, 0, 3, 0, 0, 0, 0, 4],
-		[0, 0, 8, 0, 0, 1, 0, 0, 9],
-		[0, 0, 3, 0, 7, 0, 1, 0, 0],
-		[5, 0, 0, 8, 0, 0, 3, 0, 0],
-		[1, 0, 0, 0, 0, 3, 0, 0, 0],
-		[0, 9, 0, 0, 0, 0, 0, 3, 7],
-		[0, 4, 0, 9, 5, 0, 0, 0, 0]
-	]
-];
-
-var puzzles = {
-	easy:   easy,
-	medium: medium,
-	hard:   hard,
-	evil:   evil
-};
-
-module.exports = function (difficulty) {
-	var puzzlesByDifficulty = puzzles[difficulty];
-
-	if (!puzzlesByDifficulty) {
-		throw 'Invalid difficulty: ' + difficulty + '.';
-	}
-
-	var size = puzzlesByDifficulty.length;
-
-	if (size === 0) {
-		throw 'No puzzles for difficulty: ' + difficulty + '.';
-	}
-
-	var index = Math.floor(Math.random() * size);
-
-	return puzzlesByDifficulty[index];
-};
-
-},{}],4:[function(require,module,exports){
+},{"underscore":5}],4:[function(require,module,exports){
 var _ = require('underscore');
 
 function Solver(grid) {
@@ -1912,4 +1919,4 @@ module.exports = Solver;
   }
 }.call(this));
 
-},{}]},{},[1]);
+},{}]},{},[2]);

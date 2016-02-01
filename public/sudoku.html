@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+	<title>Sudoku Solver</title>
+	<link rel="stylesheet" href="sudoku.css" />
+</head>
+
+<body>
+	<a href="https://en.wikipedia.org/wiki/Glossary_of_Sudoku" target="_blank">Glossary</a>
+
+	<div id="board"></div>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+	<script src="js/globals.js"></script>
+	<script src="js/puzzles.js"></script>
+	<script src="js/solver.js"></script>
+	<script src="js/board.js"></script>
+	<script src="js/bundle.js"></script>
+
+	<script type="text/javascript">
+		(function () {
+			var $board = $('#board');
+
+			var puzzle = randomPuzzle('evil');
+
+			var grid = new Grid(puzzle);
+			var board = new Board($board, grid);
+			var solver = new Solver(grid);
+
+			var start = new Date();
+
+			solver.solve();
+
+			var finished = new Date();
+
+			console.log(start);
+			console.log(finished);
+			console.log('Time elapsed (in microseconds):', finished - start);
+
+			if (grid.solved()) {
+				console.log('Puzzle solved!');
+
+				// A trivial animation to indicate the puzzle is solved.
+				// $board.addClass('solved');
+			} else {
+				console.log('Puzzle NOT solved.');
+			}
+		})();
+	</script>
+</body>
+</html>

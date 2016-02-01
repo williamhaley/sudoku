@@ -27,3 +27,4 @@ Install [nvm](https://github.com/creationix/nvm/blob/master/README.markdown).
   1. randomPuzzle() can be a function in app.js.
   1. puzzles.js can be in `assets`.
 1. Nothing  in `/lib` needs to be server-side, I'm just writing them in that typical node webapp way so it's easier to test them, and using browserify to generate the client-side JS. Would it be better to write them all client-side and test them as client-side code, or better to keep them more generic, not tied to the UI, and treat the client-side generation as the "extra" step here? I'm leaning towards the latter. Better as "server-side".
+  1. I feel like the end goal is that these tests run in pure node, and the web aspect is an after-thought for presentability.

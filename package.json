@@ -15,12 +15,13 @@
   "homepage": "https://github.com/williamhaley/sudoku#readme",
   "dependencies": {
     "browserify": "13.0.0",
+    "chai": "3.5.0",
     "gulp": "3.9.0",
     "mocha": "2.4.5",
     "underscore": "1.8.3"
   },
   "scripts": {
     "build-js": "browserify lib/app.js -o public/js/bundle.js",
-    "test": "./node_modules/.bin/mocha spec/*.js"
+    "test": "./node_modules/.bin/mocha -r spec/test_runner.js spec/*.js"
   }
 }

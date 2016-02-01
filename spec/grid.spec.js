@@ -1,8 +1,4 @@
-var assert = require('assert');
-var Grid   = require('../lib/Grid');
-
-// TODO WFH Do I want to make Grid a node module, and use browserify to get it
-// to front end, or write client-side JS tests?
+var Grid = require('../lib/Grid');
 
 describe('Grid', function() {
 
@@ -27,7 +23,7 @@ describe('Grid', function() {
 		it('determines the appropriate row for a linear index', function () {
 			var actual = this.grid.rowForIndex(30);
 
-			// expect(actual).eq(7);
+			expect(actual).deep.equal([0, 0, 7, 0, 9, 0, 0, 0, 2]);
 		});
 
 	});

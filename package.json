@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Experimenting with automated puzzle solvers and patterns in Sudoku.",
   "main": "index.js",
-  "scripts": {
-    "test": "./node_modules/.bin/mocha spec/*.js"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/williamhaley/sudoku.git"
@@ -23,6 +20,7 @@
     "underscore": "1.8.3"
   },
   "scripts": {
-    "build-js": "browserify lib/grid.js -o public/js/bundle.js"
+    "build-js": "browserify lib/grid.js -o public/js/bundle.js",
+    "test": "./node_modules/.bin/mocha spec/*.js"
   }
 }

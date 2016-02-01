@@ -4,8 +4,6 @@ var Grid   = require('../lib/Grid');
 // TODO WFH Do I want to make Grid a node module, and use browserify to get it
 // to front end, or write client-side JS tests?
 
-console.log(Grid);
-
 describe('Grid', function() {
 
 	describe('#rowForIndex', function () {

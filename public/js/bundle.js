@@ -1,4 +1,11 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function (global){
+global.Grid         = require('./grid.js'   );
+global.Solver       = require('./solver.js' );
+global.randomPuzzle = require('./puzzles.js');
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./grid.js":2,"./puzzles.js":3,"./solver.js":4}],2:[function(require,module,exports){
 // TODO WFH Standardize on structure for puzzle. Better to store it as a 2D
 // array, flat array, something else? Use this class to manage structure and
 // grid lookup rather than having other functions convert the puzzle to different
@@ -126,9 +133,236 @@ Grid.prototype.cells = function () {
 	return this.flattened;
 };
 
+
 module.exports = Grid;
 
-},{"underscore":2}],2:[function(require,module,exports){
+},{"underscore":5}],3:[function(require,module,exports){
+var easy = [
+	[
+		[3, 0, 9, 5, 4, 0, 8, 0, 6],
+		[0, 7, 0, 8, 3, 0, 0, 0, 0],
+		[5, 0, 2, 0, 0, 7, 3, 0, 0],
+		[0, 0, 7, 0, 9, 0, 0, 0, 2],
+		[9, 3, 0, 0, 0, 0, 0, 5, 7],
+		[4, 0, 0, 0, 7, 0, 6, 0, 0],
+		[0, 0, 3, 7, 0, 0, 5, 0, 4],
+		[0, 0, 0, 0, 1, 9, 0, 2, 0],
+		[7, 0, 1, 0, 5, 3, 9, 0, 8]
+	]
+];
+
+var medium = [
+	[
+		[3, 5, 0, 7, 0, 0, 4, 0, 0],
+		[0, 0, 7, 0, 2, 0, 0, 8, 0],
+		[2, 0, 0, 0, 0, 5, 0, 0, 3],
+		[7, 0, 1, 0, 0, 0, 0, 2, 0],
+		[0, 2, 4, 0, 0, 0, 7, 1, 0],
+		[0, 3, 0, 0, 0, 0, 8, 0, 9],
+		[1, 0, 0, 6, 0, 0, 0, 0, 8],
+		[0, 8, 0, 0, 9, 0, 6, 0, 0],
+		[0, 0, 2, 0, 0, 8, 0, 5, 4]
+	]
+];
+
+var hard = [
+	[
+		[0, 8, 0, 2, 0, 5, 9, 0, 0],
+		[0, 0, 0, 0, 0, 7, 0, 8, 0],
+		[0, 2, 4, 0, 0, 0, 0, 0, 0],
+		[0, 0, 3, 4, 9, 0, 0, 0, 7],
+		[9, 0, 0, 0, 0, 0, 0, 0, 5],
+		[8, 0, 0, 0, 2, 3, 1, 0, 0],
+		[0, 0, 0, 0, 0, 0, 4, 6, 0],
+		[0, 9, 0, 7, 0, 0, 0, 0, 0],
+		[0, 0, 5, 6, 0, 2, 0, 3, 0]
+	]
+];
+
+var evil = [
+	[
+		[0, 0, 0, 7, 6, 0, 1, 0 ,0],
+		[0, 0, 0, 0, 0, 0, 0, 4, 8],
+		[7, 0, 0, 4, 0, 0, 0, 5, 0],
+		[0, 4, 0, 0, 3, 0, 0, 0, 1],
+		[6, 0, 0, 0, 0, 0, 0, 0, 2],
+		[8, 0, 0, 0, 7, 0, 0, 6, 0],
+		[0, 5, 0, 0, 0, 8, 0, 0, 3],
+		[2, 1, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 6, 0, 1, 5, 0, 0, 0]
+	],
+	[
+		[2, 0, 0, 0, 0, 3, 0, 6, 7],
+		[0, 8, 0, 9, 1, 0, 0, 4, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[8, 0, 0, 0, 0, 4, 0, 9, 0],
+		[3, 0, 0, 5, 0, 1, 0, 0, 4],
+		[0, 4, 0, 6, 0, 0, 0, 0, 2],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 7, 0, 0, 5, 6, 0, 3, 0],
+		[9, 3, 0, 7, 0, 0, 0, 0, 5]
+	],
+	[
+		[0, 0, 0, 0, 6, 8, 0, 2, 0],
+		[6, 5, 0, 0, 0, 0, 0, 7, 0],
+		[0, 0, 0, 3, 0, 0, 0, 0, 4],
+		[0, 0, 8, 0, 0, 1, 0, 0, 9],
+		[0, 0, 3, 0, 7, 0, 1, 0, 0],
+		[5, 0, 0, 8, 0, 0, 3, 0, 0],
+		[1, 0, 0, 0, 0, 3, 0, 0, 0],
+		[0, 9, 0, 0, 0, 0, 0, 3, 7],
+		[0, 4, 0, 9, 5, 0, 0, 0, 0]
+	]
+];
+
+var puzzles = {
+	easy:   easy,
+	medium: medium,
+	hard:   hard,
+	evil:   evil
+};
+
+module.exports = function (difficulty) {
+	var puzzlesByDifficulty = puzzles[difficulty];
+
+	if (!puzzlesByDifficulty) {
+		throw 'Invalid difficulty: ' + difficulty + '.';
+	}
+
+	var size = puzzlesByDifficulty.length;
+
+	if (size === 0) {
+		throw 'No puzzles for difficulty: ' + difficulty + '.';
+	}
+
+	var index = Math.floor(Math.random() * size);
+
+	return puzzlesByDifficulty[index];
+};
+
+},{}],4:[function(require,module,exports){
+var _ = require('underscore');
+
+function Solver(grid) {
+	this.grid = grid;
+
+	this.attemptedIndices = [];
+}
+
+/*
+ * Return Array of possible answers at an index by following the rules
+ * of the game. Answer cannot already be in that row, column, or square.
+ */
+Solver.prototype.availableCandidates = function (index) {
+	var candidates = _.range(1, 10);
+
+	var row = this.grid.rowForIndex(index);
+	var col = this.grid.colForIndex(index);
+
+	candidates = _.difference(candidates, row);
+	candidates = _.difference(candidates, col);
+
+	var square = this.grid.squareForIndex(index);
+
+	candidates = _.difference(candidates, square);
+
+	return candidates;
+};
+
+Solver.prototype.solveByProcessOfElimination = function () {
+	while (!this.grid.solved()) {
+		var nothingChangedDuringIteration = true;
+
+		// Iterate over every cell and attempt to solve by process of elimination.
+		_.each(this.grid.cells(), attemptToSolveCell, this);
+
+		function attemptToSolveCell(cell, index) {
+			// Cell is already solved.
+			if (cell !== 0) {
+				return;
+			}
+
+			var candidates = this.availableCandidates(index);
+
+			// Multiple candidates. No clear solution.
+			if (candidates.length !== 1) {
+				return;
+			}
+
+			var candidate = candidates[0];
+
+			nothingChangedDuringIteration = false;
+
+			this.useCandidate(candidate, index);
+		}
+
+		// We iterated over every cell and found no new solutions. Stop using this method.
+		if (nothingChangedDuringIteration) {
+			return;
+		}
+	}
+};
+
+Solver.prototype.solveByBruteForce = function () {
+	var indexOfUnknownCell = _.indexOf(this.grid.cells(), 0);
+
+	var candidateAnswersForCell = this.availableCandidates(indexOfUnknownCell);
+
+	var that = this;
+
+	// TODO WFH _.each.
+	for (var index = 0; index < candidateAnswersForCell.length; index++) {
+		var candidate = candidateAnswersForCell[index];
+
+		that.useCandidate(candidate, indexOfUnknownCell);
+
+		that.solve();
+
+		if (that.grid.solved()) {
+			return;
+		}
+
+		// Our candidate failed, because the puzzle is not solved. Invalidate
+		// our candidate and any subsequent answer we set after it.
+		that.invalidateAnswersAfter(indexOfUnknownCell);
+	}
+};
+
+Solver.prototype.solve = function () {
+	this.solveByProcessOfElimination();
+
+	if (this.grid.solved()) {
+		return;
+	}
+
+	this.solveByBruteForce();
+};
+
+Solver.prototype.useCandidate = function (candidate, index) {
+	this.grid.set(index, candidate);
+
+	this.attemptedIndices.push(index);
+};
+
+/*
+ * We tried a candidate, then determined the puzzle was unsolvable with that
+ * candidate. Invalidate the candidate and every answer set after it.
+ */
+Solver.prototype.invalidateAnswersAfter = function (afterIndex) {
+	var index = _.indexOf(this.attemptedIndices, afterIndex);
+
+	var indicesToReset = this.attemptedIndices.splice(index);
+
+	_.each(indicesToReset, invalidateAnswer, this);
+
+	function invalidateAnswer(answerIndex) {
+		this.grid.set(answerIndex, 0);
+	}
+};
+
+module.exports = Solver;
+
+},{"underscore":5}],5:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors

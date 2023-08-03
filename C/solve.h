@@ -1,0 +1,1 @@
+void get_possibles(int *taken, int size_taken, int *possibles);
